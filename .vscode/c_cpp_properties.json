@@ -12,6 +12,13 @@
             "forcedInclude": [
                 "/opt/arduino/hardware/arduino/avr/cores/arduino/Arduino.h"
             ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": false,
+                "path": [
+                    "/opt/arduino/hardware/arduino/tools/avr/avr/include",
+                    "${WorkspaceRoot}"
+                ]
+            },
             "intelliSenseMode": "gcc-x64",
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c11",
