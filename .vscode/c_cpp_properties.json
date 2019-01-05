@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/opt/arduino/libraries/Servo/src",
+                "/opt/arduino/tools/**",
+                "/opt/arduino/hardware/arduino/avr/**",
+                "/opt/arduino/hardware/tools/avr/avr/include",
+                "/opt/arduino/hardware/arduino/avr/variants/standard"
+            ],
+            "forcedInclude": [
+                "/opt/arduino/hardware/arduino/avr/cores/arduino/Arduino.h"
+            ],
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
