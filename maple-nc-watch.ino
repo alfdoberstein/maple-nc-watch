@@ -1,7 +1,10 @@
-#include "TestClass.h"
+#include "InputReader.h"
 
 // Include the Arduino Stepper.h library:
 #include <Stepper.h>
+
+
+InputReader inputReader = InputReader();
 
 // Define number of steps per rotation:
 const int stepsPerRevolution = 2048;
@@ -11,75 +14,55 @@ const int stepsPerRevolution = 2048;
 // Pin 8-9 to IN2 on the ULN2003 driver
 // Pin 7-10 to IN3 on the ULN2003 driver
 // Pin 6-11 to IN4 on the ULN2003 driver
-
 Stepper myStepper = Stepper(stepsPerRevolution, 9, 7, 8, 6);
 
-//
-//Arduino 4 channel Wireless RF Receiver EV1527/PT2262 Decoding module
-//
-int D3 = 2;
-int D2 = 3;
-int D1 = 4;
-int D0 = 5;
-//int VT = 8;
-
-// variable for reading the input status
-int buttonState = 0;
-int lastState = 0;
 
 int counter = 0;
 
 void setup() {
-  // Set the speed to 5 rpm:
-  myStepper.setSpeed(10);
-
-  // Setup 4 channel Wireless RF Receiver EV1527/PT2262 Decoding module
-  pinMode(D3, INPUT);
-  pinMode(D2, INPUT);
-  pinMode(D1, INPUT);
-  pinMode(D0, INPUT);
-  //pinMode(VT, INPUT);
-
   // put your setup code here, to run once:
   Serial.begin(9600);
   pinMode(LED_BUILTIN, OUTPUT);
 
-  //Waiting for rf receiver module startup
-  delay(2000);
-  Serial.println("Ready");
+  // Set the speed max 17 rpm:
+  myStepper.setSpeed(17);
 
-  //TestClass test;
-  //test.setup();
+  inputReader.setup();
+
+  Serial.println("Ready");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   counter++;
 
-  buttonState = digitalRead(D3) ? 1 : 0;
-  buttonState = digitalRead(D2) ? 2 : buttonState;
+  // if (inputReader.readButtons() == false)
+  // {
+  //   delay(0);
+  //   return;
+  // }
 
-  if(buttonState != lastState) 
+  if (inputReader.buttonPressed('A', 1000)) 
   {
-    Serial.print("Button A: ");
-    if (buttonState) Serial.println("ON");
-    else Serial.println("OFF");
-
-    lastState = buttonState;
-  }  
-
-  if (buttonState == 1) 
-  {
-    myStepper.step(10);
+    myStepper.step(stepsPerRevolution);
   }
-  else if (buttonState == 2) 
+  else if (inputReader.buttonPressed('B', 1000)) 
   {
-    myStepper.step(-10);
+    myStepper.step(-stepsPerRevolution);
+  }
+  else if (inputReader.buttonPressed('C', 1)) 
+  {
+    myStepper.step(stepsPerRevolution/10);
+  }
+  else if (inputReader.buttonPressed('D', 1)) 
+  {
+    myStepper.step(-stepsPerRevolution/10);
   }
   else
   {
     delay(0);
   }
+  
   
 //  String message = "Status 2:";
 //  Serial.println(String(counter, DEC) + " " + message + "On");
@@ -89,4 +72,5 @@ void loop() {
 //  Serial.println(message + "Off");
 //  digitalWrite(LED_BUILTIN, LOW);
 //  delay(1000);
+  delay(0);
 }
