@@ -12,7 +12,7 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
 
   inputReader.setup();
-  
+
   clockMover.setup();
 
   Serial.println("Ready");
@@ -20,28 +20,29 @@ void setup() {
 
 void loop() {
 
-  if (inputReader.buttonPressed('A', 1000)) 
+  if (inputReader.buttonPressed('A', 200))
   {
     clockMover.executeCorrectTime();
   }
-  else if (inputReader.buttonPressed('B', 1000)) 
+  else if (inputReader.buttonPressed('B', 200))
   {
     clockMover.executeGoViral();
   }
-  else if (inputReader.buttonPressed('C', 1)) 
+  else if (inputReader.buttonPressed('C', 1))
   {
     clockMover.executeMoveForward();
   }
-  else if (inputReader.buttonPressed('D', 1)) 
+  else if (inputReader.buttonPressed('D', 1))
   {
     clockMover.executeMoveBackward();
   }
   else
   {
+    clockMover.clear();
     delay(10);
   }
-  
-//  digitalWrite(LED_BUILTIN, HIGH);
-//  delay(1000);
-//  digitalWrite(LED_BUILTIN, LOW);
+
+  //  digitalWrite(LED_BUILTIN, HIGH);
+  //  delay(1000);
+  //  digitalWrite(LED_BUILTIN, LOW);
 }
