@@ -77,6 +77,10 @@ void ClockMover::executeMoveForward(void)
   myStepper.setSpeed(10);
   myStepper.step(moveSteps);
   delay(accelerateStep());
+  if (sd > 0) 
+  {
+    Serial.println("Moved forward (delay " + String(sd) + ").");
+  }
 }
 
 void ClockMover::executeMoveBackward(void)
@@ -84,6 +88,10 @@ void ClockMover::executeMoveBackward(void)
   myStepper.setSpeed(10);
   myStepper.step(-moveSteps);
   delay(accelerateStep());
+  if (sd > 0) 
+  {
+    Serial.println("Moved backward (delay " + String(sd) + ").");
+  }
 }
 
 int ClockMover::accelerateStep(void)

@@ -6,6 +6,7 @@ ClockMover clockMover = ClockMover();
 
 int counter = 0;
 bool autoMove = false;
+int autoMoveSteps = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -23,13 +24,18 @@ void loop() {
 
   if (inputReader.buttonPressed('A', 200))
   {
+    Serial.println("Correcting time...");
     clockMover.executeCorrectTime();
     autoMove = true;
+    autoMoveSteps = 0;
+    Serial.println("Corrected time.");
   }
   else if (inputReader.buttonPressed('B', 200))
   {
     autoMove = false;
+    Serial.println("Going crazy...");
     clockMover.executeGoCrazy();
+    Serial.println("Go crazy end.");
   }
   else if (inputReader.buttonPressed('C', 1))
   {
@@ -41,12 +47,10 @@ void loop() {
   }
   else
   {
-    if (autoMove && counter++ > (15 * 100)) {
+    if (autoMove && counter++ > (15 * 100))
+    {
       clockMover.oneStep();
       counter = 0;
-    }
-    if (counter % 100) {
-      Serial.println(counter);
     }
     clockMover.clear();
     delay(10);
