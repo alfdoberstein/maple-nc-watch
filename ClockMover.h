@@ -5,14 +5,15 @@ class ClockMover {
   public:
     void setup(void);
     void clear(void);
-    bool executeCorrectTime(void);
-    bool executeGoViral(void);
-    bool executeMoveForward(void);
-    bool executeMoveBackward(void);
+    void executeCorrectTime(void);
+    void oneStep(void);
+    void executeGoCrazy(void);
+    void executeMoveForward(void);
+    void executeMoveBackward(void);
 
   private:
     int sd = 100;
-    
+
     int accelerateStep(void);
 };
 

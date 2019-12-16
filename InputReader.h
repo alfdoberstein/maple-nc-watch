@@ -2,9 +2,9 @@
 #define INPUTREADER_H
 
 class InputReader {
-    public:
-        void setup (void);
-        bool buttonPressed(char, int);
+  public:
+    void setup (void);
+    bool buttonPressed(char, int);
 };
 
 #endif

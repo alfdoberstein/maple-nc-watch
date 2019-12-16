@@ -7,14 +7,11 @@
 // Define number of steps per rotation:
 const int stepsPerRevolution = 2048;
 
-const int correctTimeSteps = stepsPerRevolution; // * 2;
+const int stepsPerMinute = stepsPerRevolution / 60;
 
-const int viralTimeStepsStart = stepsPerRevolution / 4;
-const int viralTimeSteps = stepsPerRevolution / 2;
-const int viralIterations = 4;
-const int viralIterationDelay = 100;
+const int crazyIterationDelay = 100;
 
-const int moveSteps = 1; // stepsPerRevolution / 10;
+const int moveSteps = 5;
 
 // Wiring:
 // Pin 9-8 to IN1 on the ULN2003 driver
@@ -26,7 +23,7 @@ Stepper myStepper = Stepper(stepsPerRevolution, 9, 7, 8, 6);
 void ClockMover::setup (void)
 {
   // Set the speed max 17 rpm:
-  myStepper.setSpeed(17);
+  myStepper.setSpeed(10);
 
   clear();
 }
@@ -41,35 +38,50 @@ void ClockMover::clear(void)
   sd = 100;
 }
 
-bool ClockMover::executeCorrectTime(void)
+void ClockMover::executeCorrectTime(void)
 {
-  myStepper.step(correctTimeSteps);
+  myStepper.setSpeed(10);
+  myStepper.step(stepsPerMinute * -25);
+  //delay(10);
 }
 
-bool ClockMover::executeGoViral(void)
+void ClockMover::oneStep(void)
 {
-  myStepper.step(viralTimeStepsStart);
-  delay(viralIterationDelay);
-
-  for (int i = 0; i < viralIterations; i++)
-  {
-    myStepper.step(viralTimeSteps);
-    delay(viralIterationDelay);
-    myStepper.step(-viralTimeSteps);
-    delay(viralIterationDelay);
-  }
-
-  myStepper.step(-viralTimeStepsStart);
+  myStepper.setSpeed(5);
+  myStepper.step(stepsPerMinute);
+  //delay(10);
 }
 
-bool ClockMover::executeMoveForward(void)
+void ClockMover::executeGoCrazy(void)
 {
+  myStepper.setSpeed(17);
+  myStepper.step(stepsPerMinute * -15);
+  delay(crazyIterationDelay);
+  myStepper.step(stepsPerMinute * +20);
+  delay(crazyIterationDelay);
+  myStepper.step(stepsPerMinute * -35);
+  delay(crazyIterationDelay);
+  myStepper.step(stepsPerMinute * +10);
+  delay(crazyIterationDelay);
+  myStepper.step(stepsPerMinute * -5);
+  delay(crazyIterationDelay);
+  myStepper.step(stepsPerMinute * +40);
+  delay(crazyIterationDelay);
+  myStepper.step(stepsPerMinute * -20);
+  delay(crazyIterationDelay);
+  myStepper.step(stepsPerMinute * +5);
+}
+
+void ClockMover::executeMoveForward(void)
+{
+  myStepper.setSpeed(10);
   myStepper.step(moveSteps);
   delay(accelerateStep());
 }
 
-bool ClockMover::executeMoveBackward(void)
+void ClockMover::executeMoveBackward(void)
 {
+  myStepper.setSpeed(10);
   myStepper.step(-moveSteps);
   delay(accelerateStep());
 }
