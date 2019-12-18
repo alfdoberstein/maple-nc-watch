@@ -4,11 +4,13 @@
 //
 //Arduino 4 channel Wireless RF Receiver EV1527/PT2262 Decoding module
 //
-int D3 = 2;
-int D2 = 3;
-int D1 = 4;
-int D0 = 5;
-//int VT = 8;
+const int D3 = 2;
+const int D2 = 3;
+const int D1 = 4;
+const int D0 = 5;
+//const int VT = 8;
+
+bool called = false;
 
 void InputReader::setup(void)
 {
@@ -27,6 +29,15 @@ void InputReader::setup(void)
 
 bool InputReader::buttonPressed(char button, int minDuration)
 {
+  /* For testing 
+  if (called == false && button == 'A')
+  {
+    called = true;
+    return true;
+  }
+  return false;
+  */
+ 
   int input;
 
   switch (button)

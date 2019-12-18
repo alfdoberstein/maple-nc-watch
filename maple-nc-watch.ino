@@ -28,6 +28,8 @@ void loop() {
     clockMover.executeCorrectTime();
     autoMove = true;
     autoMoveSteps = 0;
+    clockMover.setTime(8, 0);
+    delay(30 * 1000);
     Serial.println("Corrected time.");
   }
   else if (inputReader.buttonPressed('B', 200))
@@ -47,11 +49,23 @@ void loop() {
   }
   else
   {
-    if (autoMove && counter++ > (15 * 100))
+    if (autoMove && counter++ > (5 * 95))
     {
-      clockMover.oneStep();
       counter = 0;
+      autoMoveSteps++;
+      if (autoMoveSteps <= 180)
+      {
+        Serial.print(String(autoMoveSteps) + ". Step ");
+        clockMover.oneStep(1);
+      }
+      else
+      {
+        autoMove = false;
+        Serial.print("Last Step ");
+        clockMover.oneStep(60);
+      }
     }
+
     clockMover.clear();
     delay(10);
   }

@@ -1,5 +1,4 @@
 #include "ClockMover.h"
-#include "Arduino.h"
 
 // Include the Arduino Stepper.h library:
 #include <Stepper.h>
@@ -38,38 +37,85 @@ void ClockMover::clear(void)
   sd = 100;
 }
 
+void ClockMover::setTime(int hour, int minute)
+{
+  timeHour = hour;
+  timeMinute = minute;
+  Serial.println("Time: " + getTime() + "");
+}
+
+String ClockMover::getTime(void)
+{
+  String hourString = "0" + String(timeHour);
+  String minString = "0" + String(timeMinute);
+  return String(hourString.substring(hourString.length() - 2) + ":" + minString.substring(minString.length() - 2));
+}
+
+void ClockMover::stepMinutes(int minuts)
+{
+  myStepper.step(stepsPerMinute * minuts);
+  addTime(minuts);
+  Serial.println("Time: " + getTime() + "");
+}
+
+void ClockMover::addTime(int minuts)
+{
+  timeMinute += minuts;
+  while (timeMinute > 59)
+  {
+    timeHour++;
+    timeMinute -= 60;
+  }
+  while (timeMinute < 0)
+  {
+    timeHour--;
+    timeMinute += 60;
+  }
+  while (timeHour > 12)
+  {
+    timeHour -= 12;
+  }
+  while (timeHour < 1)
+  {
+    timeHour += 12;
+  }
+}
+
 void ClockMover::executeCorrectTime(void)
 {
   myStepper.setSpeed(10);
-  myStepper.step(stepsPerMinute * -25);
+  stepMinutes(-25);
   //delay(10);
 }
 
-void ClockMover::oneStep(void)
+void ClockMover::oneStep(int minuts)
 {
   myStepper.setSpeed(5);
-  myStepper.step(stepsPerMinute);
+  stepMinutes(minuts);
   //delay(10);
 }
 
 void ClockMover::executeGoCrazy(void)
 {
   myStepper.setSpeed(17);
-  myStepper.step(stepsPerMinute * -15);
-  delay(crazyIterationDelay);
-  myStepper.step(stepsPerMinute * +20);
-  delay(crazyIterationDelay);
-  myStepper.step(stepsPerMinute * -35);
-  delay(crazyIterationDelay);
-  myStepper.step(stepsPerMinute * +10);
-  delay(crazyIterationDelay);
-  myStepper.step(stepsPerMinute * -5);
-  delay(crazyIterationDelay);
-  myStepper.step(stepsPerMinute * +40);
-  delay(crazyIterationDelay);
-  myStepper.step(stepsPerMinute * -20);
-  delay(crazyIterationDelay);
-  myStepper.step(stepsPerMinute * +5);
+  for (int n = 0; n < 3; n++)
+  {
+    stepMinutes(-15);
+    delay(crazyIterationDelay);
+    stepMinutes(+20);
+    delay(crazyIterationDelay);
+    stepMinutes(-35);
+    delay(crazyIterationDelay);
+    stepMinutes(+10);
+    delay(crazyIterationDelay);
+    stepMinutes(-5);
+    delay(crazyIterationDelay);
+    stepMinutes(+40);
+    delay(crazyIterationDelay);
+    stepMinutes(-20);
+    delay(crazyIterationDelay);
+    stepMinutes(+5);
+  }
 }
 
 void ClockMover::executeMoveForward(void)
@@ -77,7 +123,7 @@ void ClockMover::executeMoveForward(void)
   myStepper.setSpeed(10);
   myStepper.step(moveSteps);
   delay(accelerateStep());
-  if (sd > 0) 
+  if (sd > 0)
   {
     Serial.println("Moved forward (delay " + String(sd) + ").");
   }
@@ -88,7 +134,7 @@ void ClockMover::executeMoveBackward(void)
   myStepper.setSpeed(10);
   myStepper.step(-moveSteps);
   delay(accelerateStep());
-  if (sd > 0) 
+  if (sd > 0)
   {
     Serial.println("Moved backward (delay " + String(sd) + ").");
   }
