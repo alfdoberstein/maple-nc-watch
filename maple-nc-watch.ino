@@ -31,6 +31,7 @@ void loop() {
     clockMover.setTime(8, 0);
     delay(30 * 1000);
     Serial.println("Corrected time.");
+    clockMover.oneStep(3);
   }
   else if (inputReader.buttonPressed('B', 200))
   {
@@ -49,11 +50,11 @@ void loop() {
   }
   else
   {
-    if (autoMove && counter++ > (5 * 95))
+    if (autoMove && counter++ > (411))
     {
       counter = 0;
       autoMoveSteps++;
-      if (autoMoveSteps <= 180)
+      if (autoMoveSteps <= 208)
       {
         Serial.print(String(autoMoveSteps) + ". Step ");
         clockMover.oneStep(1);
